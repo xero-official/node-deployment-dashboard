@@ -11,5 +11,10 @@ go get github.com/glendc/go-external-ip
 ## Build/Run
 
 ```bash
-go build . && ./node-deployment-dashboard
+go build -o build/dashboard && ./build/dashboard
+```
+
+## Run
+```bash
+./build/dashboard
 ```
