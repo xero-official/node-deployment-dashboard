@@ -5,7 +5,7 @@
 ## Dependencies
 ```bash
 go get github.com/ethereum/go-ethereum
-go get github.com/glendc/go-exterbal-ip
+go get github.com/glendc/go-external-ip
 ```
 
 ## Build/Run
