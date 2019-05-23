@@ -1,6 +1,7 @@
 package main
 
 import (
+    "flag"
     "io/ioutil"
     "os/user"
     "context"
@@ -64,6 +65,10 @@ var NodeTypes = map[int]NodeType {
 }
 
 func main() {
+    // Flags
+    adminFlag := flag.Bool("admin", false, "a bool")
+    flag.Parse()
+
     // Print logo
     fmt.Println(logo)
     // Setup graceful exit
@@ -86,7 +91,9 @@ func main() {
         fmt.Println("2) Remove an Existing Node")
         fmt.Println("3) Lookup Existing Node")
         fmt.Println("4) Exit")
-        fmt.Println("5) Deploy Contract")
+        if *adminFlag {
+            fmt.Println("5) Deploy Contract")
+        }
 
         _, _ = fmt.Scan(&contractOption)
 
@@ -186,7 +193,7 @@ func main() {
             fmt.Printf("\nExiting Program\n")
             os.Exit(0)
 
-        } else if contractOption == 5 {
+        } else if contractOption == 5 && *adminFlag {
 
             reader := bufio.NewReader(os.Stdin)
 
