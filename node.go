@@ -2,8 +2,6 @@ package main
 
 import (
     "flag"
-    "io/ioutil"
-    "os/user"
     "context"
     "crypto/ecdsa"
     "fmt"
@@ -15,6 +13,7 @@ import (
     "syscall"
     "os/signal"
     "encoding/hex"
+    "time"
 
     "github.com/ethereum/go-ethereum/accounts/abi/bind"
     "github.com/ethereum/go-ethereum/common"
@@ -103,35 +102,42 @@ func main() {
 
             if nodeType != 5 {
 
-                reader := bufio.NewReader(os.Stdin)
+                if checkBinExistence() {
 
-                // Get Node ID
-                nodeId := hex.EncodeToString(getNodeId())
-                fmt.Println("\nNode ID Found: " + nodeId)
+                    reader := bufio.NewReader(os.Stdin)
 
-                // Get Node IP
-                var nodeIp string
-                consensus := externalip.DefaultConsensus(nil, nil)
-                ip, _ := consensus.ExternalIP()
-                nodeIp = ip.String()
+                    // Get Node ID
+                    nodeId := hex.EncodeToString(getNodeId())
+                    fmt.Println("\nNode ID Found: " + nodeId)
 
-                fmt.Println("Node IP Address Found: " + nodeIp)
+                    // Get Node IP
+                    var nodeIp string
+                    consensus := externalip.DefaultConsensus(nil, nil)
+                    ip, _ := consensus.ExternalIP()
+                    nodeIp = ip.String()
 
-                // Get Node Port
-                var nodePort string
-                fmt.Println("Enter Node Port:")
-                nodePort, _ = reader.ReadString('\n')
-                nodePort = strings.TrimSuffix(nodePort, "\n")
+                    fmt.Println("Node IP Address Found: " + nodeIp)
 
-                // Get Private Key
-                var privateKey string
-                fmt.Println("Enter Private Key of Address Containing Node Collateral:")
-                privateKey, _ = reader.ReadString('\n')
-                privateKey = strings.TrimSuffix(privateKey, "\n")
+                    // Get Node Port
+                    var nodePort string
+                    fmt.Println("Enter Node Port:")
+                    nodePort, _ = reader.ReadString('\n')
+                    nodePort = strings.TrimSuffix(nodePort, "\n")
 
-                addNode(nodeId, nodeIp, nodePort, privateKey, nodeType)
+                    // Get Private Key
+                    var privateKey string
+                    fmt.Println("Enter Private Key of Address Containing Node Collateral:")
+                    privateKey, _ = reader.ReadString('\n')
+                    privateKey = strings.TrimSuffix(privateKey, "\n")
 
-                selectionFlag = true
+                    addNode(nodeId, nodeIp, nodePort, privateKey, nodeType)
+
+                    selectionFlag = true
+
+                } else {
+                    fmt.Println("Node Not Found - Unable To Continue")
+                    os.Exit(0)
+                }
 
             } else {
 
@@ -419,9 +425,60 @@ func checkNodeExistence(nodeAddress string, nodeType int) {
     }
     fmt.Println("\n")
 }
+/*
+func checkBinExistence() bool {
+    var nodeExistenceFlag = false
+    var nodeInstallationFlag = false
 
+    for nodeExistenceFlag == false {
+        nodeExistenceFlag = getBlockHeight()
+        if nodeExistenceFlag {
+            return true
+        } else if nodeInstallationFlag == false {
+            reader := bufio.NewReader(os.Stdin)
+            var installNodeString string
+            fmt.Println("Would You Like To Install Node Binary? (Y/N)")
+            installNodeString, _ = reader.ReadString('\n')
+            installNodeString = strings.TrimSuffix(installNodeString, "\n")
+                if installNodeString == "Y" {
+                    nodeInstallationFlag = installNode()
+                } else {
+                    fmt.Println("\nUnable To Find Active Node - Exiting Dashboard")
+                    os.Exit(0)
+                }
+        }
+        time.Sleep(20 * time.Second)
+    }
+    return false
+}
+
+func installNode() bool {
+    exec.Command("/bin/sh", "/home/nucleos/scripts/node.sh")
+    return true
+}
+
+// Get lastes block and check if node is active
+func getBlockHeight() bool {
+    homeDirectory := getHomeDirectory()
+
+    client, err := ethclient.Dial(homeDirectory + "")
+    if err != nil {
+        fmt.Println("Xero Node Not Found")
+        return false
+    }
+
+    _, err = client.BlockByNumber(context.Background(), nil)
+    if err != nil {
+        fmt.Println("Xero Node Not Found")
+        return false
+    }
+    fmt.Println("Xero Node Found")
+    return true
+}
+*/
 func contractDeployment(key string) {
     for _, nodeType := range NodeTypes {
+        time.Sleep(30 * time.Second)
         deployContract(key, nodeType.RequiredCollateral)
     }
 }
@@ -485,7 +542,7 @@ func deployContract(key string, contractCollateral int) {
     fmt.Println("Saving Contract Deployment Output...\n")
 
 }
-
+/*
 // Get user home directory from env
 func getHomeDirectory() string {
     usr, err := user.Current()
@@ -510,3 +567,4 @@ func getNodeId() []byte {
     pubkeyBytes := crypto.FromECDSAPub(&enodeId.PublicKey)[1:]
     return pubkeyBytes
 }
+*/
