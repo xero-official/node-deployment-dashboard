@@ -276,9 +276,10 @@ func getNodeType() int {
 }
 
 func addNode(nodeId string, nodeIp string, nodePort string, key string, nodeType int) {
-    homeDirectory := getHomeDirectory()
+    //homeDirectory := getHomeDirectory()
+    //homeDirectory := getHomeDirectory()
 
-    client, err := ethclient.Dial(homeDirectory + "/.xerom/geth.ipc")
+    client, err := ethclient.Dial(DefaultDataDir() + "/geth.ipc")
     if err != nil {
         log.Fatal(err)
     }
@@ -330,9 +331,9 @@ func addNode(nodeId string, nodeIp string, nodePort string, key string, nodeType
 }
 
 func removeNode(key string, nodeType int) {
-    homeDirectory := getHomeDirectory()
+    //homeDirectory := getHomeDirectory()
 
-    client, err := ethclient.Dial(homeDirectory + "/.xerom/geth.ipc")
+    client, err := ethclient.Dial(DefaultDataDir() + "/geth.ipc")
     if err != nil {
         log.Fatal(err)
     }
@@ -384,9 +385,9 @@ func removeNode(key string, nodeType int) {
 }
 
 func checkNodeExistence(nodeAddress string, nodeType int) {
-    homeDirectory := getHomeDirectory()
+    //homeDirectory := getHomeDirectory()
 
-    client, err := ethclient.Dial(homeDirectory + "/.xerom/geth.ipc")
+    client, err := ethclient.Dial(DefaultDataDir() + "/geth.ipc")
     if err != nil {
         log.Fatal(err)
     }
@@ -483,9 +484,9 @@ func contractDeployment(key string) {
     }
 }
 func deployContract(key string, contractCollateral int) {
-    homeDirectory := getHomeDirectory()
+    //homeDirectory := getHomeDirectory()
 
-    client, err := ethclient.Dial(homeDirectory + "/.xerom/geth.ipc")
+    client, err := ethclient.Dial(DefaultDataDir() + "/geth.ipc")
     if err != nil {
         log.Fatal(err)
     }

@@ -2,6 +2,7 @@ package main
 
 import (
     "time"
+    "runtime"
     "io/ioutil"
     "os/user"
     "os/exec"
@@ -11,6 +12,7 @@ import (
     "bufio"
     "os"
     "strings"
+    "path/filepath"
 
     "github.com/ethereum/go-ethereum/crypto"
     "github.com/ethereum/go-ethereum/ethclient"
@@ -77,9 +79,9 @@ func installSystemService() {
 
 // Get lastes block and check if node is active
 func getBlockHeight() bool {
-    homeDirectory := getHomeDirectory()
+    //homeDirectory := getHomeDirectory()
 
-    client, err := ethclient.Dial(homeDirectory + "/.xerom/geth.ipc")
+    client, err := ethclient.Dial(DefaultDataDir() + "/geth.ipc")
     if err != nil {
         fmt.Println("Xero Node Not Found")
         return false
@@ -105,7 +107,7 @@ func getHomeDirectory() string {
 
 // Retrieve nodekey and calculate enodeid
 func getNodeId() []byte {
-    b, err := ioutil.ReadFile(getHomeDirectory() + "/.xerom/geth/nodekey")
+    b, err := ioutil.ReadFile(DefaultDataDir() + "/geth/nodekey")
     if err != nil {
         fmt.Print(err)
         return []byte{}
@@ -117,4 +119,30 @@ func getNodeId() []byte {
     }
     pubkeyBytes := crypto.FromECDSAPub(&enodeId.PublicKey)[1:]
     return pubkeyBytes
+}
+
+func homeDir() string {
+	if home := os.Getenv("HOME"); home != "" {
+		return home
+	}
+	if usr, err := user.Current(); err == nil {
+		return usr.HomeDir
+	}
+	return ""
+}
+
+func DefaultDataDir() string {
+	// Try to place the data folder in the user's home dir
+	home := homeDir()
+	if home != "" {
+		if runtime.GOOS == "darwin" {
+			return filepath.Join(home, "Library", "Xerom")
+		} else if runtime.GOOS == "windows" {
+			return filepath.Join(home, "AppData", "Roaming", "Xerom")
+		} else {
+			return filepath.Join(home, ".xerom")
+		}
+	}
+	// As we cannot guess a stable location, return empty and handle later
+	return ""
 }
