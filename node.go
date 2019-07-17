@@ -480,10 +480,77 @@ func getBlockHeight() bool {
 func contractDeployment(key string) {
     for _, nodeType := range NodeTypes {
         time.Sleep(30 * time.Second)
-        deployContract(key, nodeType.RequiredCollateral)
+        deployNodeTypeContract(key, nodeType.RequiredCollateral)
     }
+
+    time.Sleep(30 * time.Second)
+    mappingAddress := deployMappingContract(key)
+
+    count := int(0)
+    for _, nodeType := range NodeTypes {
+        time.Sleep(30 * time.Second)
+        updateNodeTypeContractMappingAddress(key, count, mappingAddress)
+        count++
+    }
+
 }
-func deployContract(key string, contractCollateral int) {
+
+func updateNodeTypeContractMappingAddress(key string, nodeType int, mappingAddress common.Address) {
+    //homeDirectory := getHomeDirectory()
+    //homeDirectory := getHomeDirectory()
+
+    client, err := ethclient.Dial(DefaultDataDir() + "/geth.ipc")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    privateKey, err := crypto.HexToECDSA(key)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    publicKey := privateKey.Public()
+    publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
+    if !ok {
+        log.Fatal("error casting public key to ECDSA")
+    }
+
+    fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
+    nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    gasPrice, err := client.SuggestGasPrice(context.Background())
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    auth := bind.NewKeyedTransactor(privateKey)
+    auth.Nonce = big.NewInt(int64(nonce))
+    auth.Value = big.NewInt(0) // in wei
+    auth.GasLimit = uint64(3000000) // in units
+    auth.GasPrice = gasPrice
+
+    address := common.HexToAddress(NodeTypes[nodeType].ContractAddress)
+    instance, err := NewNodeContract(address, client)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // Add node
+    tx, err := instance.UpdateNodeMappingAddress(mappingAddress)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    fmt.Println("Updating Mapping Address: " + NodeTypes[nodeType].Name)
+    fmt.Printf("Tx Sent: %s", tx.Hash().Hex())
+    fmt.Println("\n")
+
+}
+
+func deployNodeTypeContract(key string, contractCollateral int) {
     //homeDirectory := getHomeDirectory()
 
     client, err := ethclient.Dial(DefaultDataDir() + "/geth.ipc")
@@ -542,6 +609,68 @@ func deployContract(key string, contractCollateral int) {
     }
     fmt.Println("Saving Contract Deployment Output...\n")
 
+}
+
+func deployMappingContract(key string) common.Address {
+    //homeDirectory := getHomeDirectory()
+
+    client, err := ethclient.Dial(DefaultDataDir() + "/geth.ipc")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    privateKey, err := crypto.HexToECDSA(key)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    publicKey := privateKey.Public()
+    publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
+    if !ok {
+        log.Fatal("error casting public key to ECDSA")
+    }
+
+    fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
+    nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    gasPrice, err := client.SuggestGasPrice(context.Background())
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    auth := bind.NewKeyedTransactor(privateKey)
+    auth.Nonce = big.NewInt(int64(nonce))
+    auth.Value = big.NewInt(0) // in wei
+    auth.GasLimit = uint64(3000000) // in units
+    auth.GasPrice = gasPrice
+
+    // Deploy contract
+    address, tx, _, err := DeployNodeMappingContract(auth, client))
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    fmt.Println("Deploying Contract...\n\n")
+    fmt.Printf("Tx sent: %s\n", tx.Hash().Hex())
+    fmt.Printf("Contract Address: %s", address.Hex())
+    fmt.Println("\n")
+
+    f, err := os.OpenFile("contractDeployments.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+    if err != nil {
+        log.Fatal(err)
+    }
+    if _, err := f.Write([]byte(address.Hex() + "\n")); err != nil {
+        log.Fatal(err)
+    }
+    if err := f.Close(); err != nil {
+         log.Fatal(err)
+    }
+    fmt.Println("Saving Contract Deployment Output...\n")
+
+    return address
 }
 /*
 // Get user home directory from env
