@@ -1,6 +1,6 @@
 pragma solidity ^0.4.25;
 //pragma solidity ^0.5.7;
-contract NodeMapping {
+contract NodeMappingContract {
     function AddNode(address, string, string) public {}
     function RemoveNode(address, string, string) public {}
     function CheckExistence(address, string, string) public returns (bool) {}
@@ -22,7 +22,7 @@ contract NodeContract {
     address owner;
     uint internal requiredCollateral;
 
-    NodeMapping nodeMapping;
+    NodeMappingContract nodeMapping;
 
     constructor(uint setCollateralRequirement) public {
         nodeCount = 0;
@@ -30,10 +30,10 @@ contract NodeContract {
         owner = msg.sender;
     }
     function UpdateNodeMappingAddress(address mappingAddress) onlyOwner public {
-        nodeMapping = NodeMapping(mappingAddress);
+        nodeMapping = NodeMappingContract(mappingAddress);
     }
     function AddNode(string memory id, string memory ip, string memory port) public payable returns (bool) {
-        assert(msg.value == requiredCollateral * 1 ether && nodeMapping.CheckExistence(msg.sender, id, ip));
+        assert(msg.value == requiredCollateral * 1 ether && !nodeMapping.CheckExistence(msg.sender, id, ip));
         Node storage newNode = nodeMap[msg.sender];
         newNode.nodeAddress = msg.sender;
         newNode.collateral = msg.value;

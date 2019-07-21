@@ -487,7 +487,7 @@ func contractDeployment(key string) {
     mappingAddress := deployMappingContract(key)
 
     count := int(0)
-    for _, nodeType := range NodeTypes {
+    for _, _ = range NodeTypes {
         time.Sleep(30 * time.Second)
         updateNodeTypeContractMappingAddress(key, count, mappingAddress)
         count++
@@ -539,7 +539,7 @@ func updateNodeTypeContractMappingAddress(key string, nodeType int, mappingAddre
     }
 
     // Add node
-    tx, err := instance.UpdateNodeMappingAddress(mappingAddress)
+    tx, err := instance.UpdateNodeMappingAddress(auth, mappingAddress)
     if err != nil {
         log.Fatal(err)
     }
@@ -648,7 +648,7 @@ func deployMappingContract(key string) common.Address {
     auth.GasPrice = gasPrice
 
     // Deploy contract
-    address, tx, _, err := DeployNodeMappingContract(auth, client))
+    address, tx, _, err := DeployNodeMappingContract(auth, client)
     if err != nil {
         log.Fatal(err)
     }
