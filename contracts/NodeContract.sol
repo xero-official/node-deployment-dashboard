@@ -32,6 +32,9 @@ contract NodeContract {
     function UpdateNodeMappingAddress(address mappingAddress) onlyOwner public {
         nodeMapping = NodeMappingContract(mappingAddress);
     }
+    function GetNodeMappingAddress() public returns (address) {
+        return address(nodeMapping);
+    }
     function AddNode(string memory id, string memory ip, string memory port) public payable returns (bool) {
         assert(msg.value == requiredCollateral * 1 ether && !nodeMapping.CheckExistence(msg.sender, id, ip));
         Node storage newNode = nodeMap[msg.sender];
@@ -67,6 +70,9 @@ contract NodeContract {
     }
     function GetNodePort(address nodeAddress) public view returns (string) {
         return nodeMap[nodeAddress].nodePort;
+    }
+    function GetNodeCount() public view returns (uint) {
+        return nodeCount;
     }
 
     modifier onlyOwner {

@@ -486,7 +486,7 @@ func contractDeployment(key string) {
     time.Sleep(30 * time.Second)
     mappingAddress := deployMappingContract(key)
 
-    count := int(0)
+    count := int(1)
     for _, _ = range NodeTypes {
         time.Sleep(30 * time.Second)
         updateNodeTypeContractMappingAddress(key, count, mappingAddress)
