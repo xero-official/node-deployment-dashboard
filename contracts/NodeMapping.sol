@@ -33,13 +33,13 @@ contract NodeMapping {
     function SetOperator(address newOperator) OwnerOrOperator public {
         operator = newOperator;
     }
-    function GetOperator() public returns (address) {
+    function GetOperator() public view returns (address) {
         return operator;
     }
-    function GetOwner() public returns (address) {
+    function GetOwner() public view returns (address) {
         return owner;
     }
-    function GetNodeCount() public returns (uint256) {
+    function GetNodeCount() public view returns (uint256) {
         return nodeCount;
     }
     modifier OwnerOrOperator {

@@ -32,7 +32,7 @@ contract NodeContract {
     function UpdateNodeMappingAddress(address mappingAddress) onlyOwner public {
         nodeMapping = NodeMappingContract(mappingAddress);
     }
-    function GetNodeMappingAddress() public returns (address) {
+    function GetNodeMappingAddress() public view returns (address) {
         return address(nodeMapping);
     }
     function AddNode(string memory id, string memory ip, string memory port) public payable returns (bool) {

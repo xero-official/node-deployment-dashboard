@@ -39,6 +39,8 @@ type NodeType struct {
     ContractAddress       string
 }
 
+var MappingAddress = "0x3717AD55666577Eb92fCa3e5F9F71958bD60c620"
+
 var NodeTypes = map[int]NodeType {
     1 : NodeType{
                 Name:                  "Chain Node",
@@ -92,6 +94,7 @@ func main() {
         fmt.Println("4) Exit")
         if *adminFlag {
             fmt.Println("5) Deploy Contract")
+            fmt.Println("6) Contract Statistics")
         }
 
         _, _ = fmt.Scan(&contractOption)
@@ -211,6 +214,21 @@ func main() {
 
             // Deploy Contracts
             contractDeployment(deploymentKey)
+            selectionFlag = true
+
+        } else if contractOption == 6 && *adminFlag {
+
+            reader := bufio.NewReader(os.Stdin)
+
+            // Get Mapping Contract Address
+            var mappingContractAddress string
+            fmt.Println("Enter Address For Mapping Contract:")
+            mappingContractAddress, _ = reader.ReadString('\n')
+            mappingContractAddress = strings.TrimSuffix(mappingContractAddress, "\n")
+
+            MappingAddress = mappingContractAddress
+
+            checkNodeStats()
             selectionFlag = true
 
         } else {
@@ -671,6 +689,69 @@ func deployMappingContract(key string) common.Address {
     fmt.Println("Saving Contract Deployment Output...\n")
 
     return address
+}
+
+func checkNodeStats() {
+    //homeDirectory := getHomeDirectory()
+
+    client, err := ethclient.Dial(DefaultDataDir() + "/geth.ipc")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    for nodeType := range NodeTypes {
+
+        address := common.HexToAddress(NodeTypes[nodeType].ContractAddress)
+        instance, err := NewNodeContract(address, client)
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        // Get node mapping address
+        mappingAddress, err := instance.GetNodeMappingAddress(&bind.CallOpts{})
+        if err != nil {
+            log.Fatal(err)
+        }
+        // Get node count
+        nodeCount, err := instance.GetNodeCount(&bind.CallOpts{})
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        fmt.Println("Checking Node Contract Stats..")
+        fmt.Println("Node Type: " + NodeTypes[nodeType].Name)
+        fmt.Println("Node Mapping Address: " + mappingAddress.Hex())
+        fmt.Println("Node Count: " + nodeCount.String())
+        fmt.Println("\n")
+    }
+
+    mainMappingAddress := common.HexToAddress(MappingAddress)
+    instance, err := NewNodeMapping(mainMappingAddress, client)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // Get node mapping operator
+    mappingOperator, err := instance.GetOperator(&bind.CallOpts{})
+    if err != nil {
+        log.Fatal(err)
+    }
+    // Get node mapping owner
+    mappingOwner, err := instance.GetOwner(&bind.CallOpts{})
+    if err != nil {
+        log.Fatal(err)
+    }
+    // Get node count
+    mappingNodeCount, err := instance.GetNodeCount(&bind.CallOpts{})
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    fmt.Println("Checking Node Mapping Contract Stats..")
+    fmt.Println("Node Mapping Operator: " + mappingOperator.Hex())
+    fmt.Println("Node Mapping Owner: " + mappingOwner.Hex())
+    fmt.Println("Node Count: " + mappingNodeCount.String())
+    fmt.Println("\n")
 }
 /*
 // Get user home directory from env
