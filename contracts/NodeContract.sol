@@ -1,6 +1,6 @@
 pragma solidity ^0.4.25;
 //pragma solidity ^0.5.7;
-contract NodeMappingContract {
+contract MappingReference {
     function AddNode(address, string, string) public {}
     function RemoveNode(address, string, string) public {}
     function CheckExistence(address, string, string) public returns (bool) {}
@@ -22,7 +22,7 @@ contract NodeContract {
     address owner;
     uint internal requiredCollateral;
 
-    NodeMappingContract nodeMapping;
+    MappingReference nodeMapping;
 
     constructor(uint setCollateralRequirement) public {
         nodeCount = 0;
@@ -30,7 +30,7 @@ contract NodeContract {
         owner = msg.sender;
     }
     function UpdateNodeMappingAddress(address mappingAddress) onlyOwner public {
-        nodeMapping = NodeMappingContract(mappingAddress);
+        nodeMapping = MappingReference(mappingAddress);
     }
     function GetNodeMappingAddress() public view returns (address) {
         return address(nodeMapping);

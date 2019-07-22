@@ -738,7 +738,7 @@ func deployMappingContract(key string) common.Address {
     auth.GasPrice = gasPrice
 
     // Deploy contract
-    address, tx, _, err := DeployNodeMappingContract(auth, client)
+    address, tx, _, err := DeployNodeMapping(auth, client)
     if err != nil {
         log.Fatal(err)
     }
