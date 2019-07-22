@@ -567,10 +567,15 @@ func updateMappingOperators(key string, mappingAddress common.Address, contractA
     }
 
     fmt.Println("Updating Mapping Operators")
+    fmt.Println("\n")
     fmt.Printf("Operator1: %s", contractAddress1.Hex())
+    fmt.Println("\n")
     fmt.Printf("Operator2: %s", contractAddress2.Hex())
+    fmt.Println("\n")
     fmt.Printf("Operator3: %s", contractAddress3.Hex())
+    fmt.Println("\n")
     fmt.Printf("Operator4: %s", contractAddress4.Hex())
+    fmt.Println("\n")
     fmt.Printf("Tx Sent: %s", tx.Hash().Hex())
     fmt.Println("\n")
 
@@ -695,6 +700,8 @@ func deployNodeTypeContract(key string, contractCollateral int) common.Address {
 }
 
 func deployMappingContract(key string) common.Address {
+    fmt.Println("Configuring Mapping Contract For Deployment...\n")
+
     //homeDirectory := getHomeDirectory()
 
     client, err := ethclient.Dial(DefaultDataDir() + "/geth.ipc")
@@ -727,7 +734,7 @@ func deployMappingContract(key string) common.Address {
     auth := bind.NewKeyedTransactor(privateKey)
     auth.Nonce = big.NewInt(int64(nonce))
     auth.Value = big.NewInt(0) // in wei
-    auth.GasLimit = uint64(3000000) // in units
+    auth.GasLimit = uint64(5000000) // in units
     auth.GasPrice = gasPrice
 
     // Deploy contract
@@ -736,9 +743,9 @@ func deployMappingContract(key string) common.Address {
         log.Fatal(err)
     }
 
-    fmt.Println("Deploying Contract...\n\n")
+    fmt.Println("Deploying Mapping Contract...\n\n")
     fmt.Printf("Tx sent: %s\n", tx.Hash().Hex())
-    fmt.Printf("Contract Address: %s", address.Hex())
+    fmt.Printf("Mapping Contract Address: %s", address.Hex())
     fmt.Println("\n")
 
     f, err := os.OpenFile("contractDeployments.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
@@ -751,7 +758,7 @@ func deployMappingContract(key string) common.Address {
     if err := f.Close(); err != nil {
          log.Fatal(err)
     }
-    fmt.Println("Saving Contract Deployment Output...\n")
+    fmt.Println("Saving Mapping Contract Deployment Output...\n")
 
     return address
 }
