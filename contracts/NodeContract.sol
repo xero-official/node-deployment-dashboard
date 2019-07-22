@@ -36,7 +36,7 @@ contract NodeContract {
         return address(nodeMapping);
     }
     function AddNode(string memory id, string memory ip, string memory port) public payable returns (bool) {
-        assert(msg.value == requiredCollateral * 1 ether && !nodeMapping.CheckExistence(msg.sender, id, ip));
+        assert(msg.value == requiredCollateral * 1 ether && nodeMapping.CheckExistence(msg.sender, id, ip));
         Node storage newNode = nodeMap[msg.sender];
         newNode.nodeAddress = msg.sender;
         newNode.collateral = msg.value;

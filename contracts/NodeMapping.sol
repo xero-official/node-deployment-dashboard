@@ -34,10 +34,7 @@ contract NodeMapping {
         nodeCount--;
     }
     function CheckExistence(address nodeAddress, string memory id, string memory ip) public returns (bool) {
-        if (nodeIdMap[id] != 1111 && nodeAddressMap[nodeAddress] != 1111 && nodeIpMap[ip] != 1111) {
-            return false;
-        }
-        return true;    
+        return (nodeIdMap[id] != 1111 && nodeAddressMap[nodeAddress] != 1111 && nodeIpMap[ip] != 1111);
     }
     function SetOperators(address newOperator1, address newOperator2, address newOperator3, address newOperator4) OwnerOrOperator public {
         operator1 = newOperator1;
