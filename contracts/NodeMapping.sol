@@ -15,10 +15,11 @@ contract NodeMapping {
 
     constructor() public {
         owner = msg.sender;
-        operator1 = msg.sender;
-        operator2 = msg.sender;
-        operator3 = msg.sender;
-        operator4 = msg.sender;
+        //operator1 = msg.sender;
+        //operator2 = msg.sender;
+        //operator3 = msg.sender;
+        //operator4 = msg.sender;
+        nodeCount = 0;
     }
     function AddNode(address nodeAddress, string memory id, string memory ip) OwnerOrOperator public {
         nodeIdMap[id] = 1111;
