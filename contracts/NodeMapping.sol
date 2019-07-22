@@ -6,11 +6,11 @@ contract NodeMapping {
     mapping (string => uint) nodeIdMap; 
     mapping (address => uint) nodeAddressMap; 
     mapping (string => uint) nodeIpMap; 
-    address owner;
-    address operator1;
-    address operator2;
-    address operator3;
-    address operator4;
+    address internal owner;
+    address internal operator1;
+    address internal operator2;
+    address internal operator3;
+    address internal operator4;
     uint256 nodeCount;
 
     constructor() public {
@@ -61,8 +61,9 @@ contract NodeMapping {
     function GetNodeCount() public view returns (uint256) {
         return nodeCount;
     }
-    modifier OwnerOrOperator {
-        require(msg.sender == owner || msg.sender == operator1 || msg.sender == operator2 || msg.sender == operator3 || msg.sender == operator4);
+    modifier OwnerOrOperator() {         
+        if (msg.sender != owner && msg.sender != operator1 && msg.sender != operator2 && msg.sender != operator3 && msg.sender != operator4) revert();
+        //require(msg.sender == owner || msg.sender == operator1 || msg.sender == operator2 || msg.sender == operator3 || msg.sender == operator4);
         _;
     }
 }

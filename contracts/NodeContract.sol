@@ -19,7 +19,7 @@ contract NodeContract {
     mapping (address => Node) nodeMap; 
     mapping (uint => address) nodeIndexMap; 
     uint nodeCount;
-    address owner;
+    address internal owner;
     uint internal requiredCollateral;
 
     MappingReference nodeMapping;
@@ -75,8 +75,8 @@ contract NodeContract {
         return nodeCount;
     }
 
-    modifier onlyOwner {
-        require(msg.sender == owner);
+    modifier onlyOwner() {
+        if(msg.sender != owner) revert();
         _;
     }
 }
