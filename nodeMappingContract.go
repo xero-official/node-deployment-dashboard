@@ -28,18 +28,18 @@ var (
 )
 
 // NodeMappingABI is the input ABI used to generate the binding from.
-const NodeMappingABI = "[{\"constant\":true,\"inputs\":[],\"name\":\"GetOwner\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"nodeAddress\",\"type\":\"address\"},{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"ip\",\"type\":\"string\"}],\"name\":\"CheckExistence\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"GetNodeCount\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"nodeAddress\",\"type\":\"address\"},{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"ip\",\"type\":\"string\"}],\"name\":\"AddNode\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"nodeAddress\",\"type\":\"address\"},{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"ip\",\"type\":\"string\"}],\"name\":\"RemoveNode\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"GetOperator\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"newOperator\",\"type\":\"address\"}],\"name\":\"SetOperator\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"name\":\"setCollateralRequirement\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}]"
+const NodeMappingABI = "[{\"constant\":true,\"inputs\":[],\"name\":\"GetOwner\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"nodeAddress\",\"type\":\"address\"},{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"ip\",\"type\":\"string\"}],\"name\":\"CheckExistence\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"GetOperator1\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"GetNodeCount\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"newOperator1\",\"type\":\"address\"},{\"name\":\"newOperator2\",\"type\":\"address\"},{\"name\":\"newOperator3\",\"type\":\"address\"},{\"name\":\"newOperator4\",\"type\":\"address\"}],\"name\":\"SetOperators\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"GetOperator3\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"nodeAddress\",\"type\":\"address\"},{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"ip\",\"type\":\"string\"}],\"name\":\"AddNode\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"nodeAddress\",\"type\":\"address\"},{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"ip\",\"type\":\"string\"}],\"name\":\"RemoveNode\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"GetOperator2\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"GetOperator4\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}]"
 
 // NodeMappingBin is the compiled bytecode used for deploying new contracts.
-const NodeMappingBin = `0x608060405234801561001057600080fd5b506040516020806107638339016040526003805433600160a060020a03199182168117909255600480549091169091179055610712806100516000396000f3006080604052600436106100825763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416630ae50a3981146100875780631240abac146100b857806370f2a97114610171578063ba7249c814610198578063c9ba0b9a1461023f578063cededfb3146102e4578063dbebfba6146102f9575b600080fd5b34801561009357600080fd5b5061009c61031a565b60408051600160a060020a039092168252519081900360200190f35b3480156100c457600080fd5b5060408051602060046024803582810135601f810185900485028601850190965285855261015d958335600160a060020a031695369560449491939091019190819084018382808284375050604080516020601f89358b018035918201839004830284018301909452808352979a9998810197919650918201945092508291508401838280828437509497506103299650505050505050565b604080519115158252519081900360200190f35b34801561017d57600080fd5b50610186610432565b60408051918252519081900360200190f35b3480156101a457600080fd5b5060408051602060046024803582810135601f810185900485028601850190965285855261023d958335600160a060020a031695369560449491939091019190819084018382808284375050604080516020601f89358b018035918201839004830284018301909452808352979a9998810197919650918201945092508291508401838280828437509497506104389650505050505050565b005b34801561024b57600080fd5b5060408051602060046024803582810135601f810185900485028601850190965285855261023d958335600160a060020a031695369560449491939091019190819084018382808284375050604080516020601f89358b018035918201839004830284018301909452808352979a99988101979196509182019450925082915084018382808284375094975061055d9650505050505050565b3480156102f057600080fd5b5061009c61067a565b34801561030557600080fd5b5061023d600160a060020a0360043516610689565b600354600160a060020a031690565b600080836040518082805190602001908083835b6020831061035c5780518252601f19909201916020918201910161033d565b51815160209384036101000a60001901801990921691161790529201948552506040519384900301909220546104571491508190506103b45750600160a060020a038416600090815260016020526040902054610457145b8061042057506002826040518082805190602001908083835b602083106103ec5780518252601f1990920191602091820191016103cd565b51815160209384036101000a6000190180199092169116179052920194855250604051938490030190922054610457149150505b151561042857fe5b5060019392505050565b60055490565b600354600160a060020a031633148061045b5750600454600160a060020a031633145b151561046657600080fd5b6104576000836040518082805190602001908083835b6020831061049b5780518252601f19909201916020918201910161047c565b51815160209384036101000a600019018019909216911617905292019485525060408051948590038201852095909555600160a060020a03881660009081526001825294909420610457908190558551909460029487945092508291908401908083835b6020831061051e5780518252601f1990920191602091820191016104ff565b51815160209384036101000a60001901801990921691161790529201948552506040519384900301909220929092555050600580546001019055505050565b600354600160a060020a03163314806105805750600454600160a060020a031633145b151561058b57600080fd5b6000826040518082805190602001908083835b602083106105bd5780518252601f19909201916020918201910161059e565b51815160209384036101000a6000190180199092169116179052920194855250604080519485900382018520600090819055600160a060020a038916815260018352908120558451600294869450925082918401908083835b602083106106355780518252601f199092019160209182019101610616565b51815160001960209485036101000a81019182169119929092161790915293909101958652604051958690030190942060009055600580549091019055505050505050565b600454600160a060020a031690565b600354600160a060020a03163314806106ac5750600454600160a060020a031633145b15156106b757600080fd5b6004805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03929092169190911790555600a165627a7a72305820dabad8272b7e4ab40121ec55ad747808791c096c0d194423463c4e515bb9453f0029`
+const NodeMappingBin = `0x608060405234801561001057600080fd5b506003805433600160a060020a0319918216811790925560048054821683179055600580548216831790556006805482168317905560078054909116909117905561089c806100606000396000f3006080604052600436106100a35763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416630ae50a3981146100a85780631240abac146100d95780636589c3ec1461019257806370f2a971146101a75780637486a074146101ce578063b3df893414610203578063ba7249c814610218578063c9ba0b9a146102bd578063e56374bf14610362578063f905a78014610377575b600080fd5b3480156100b457600080fd5b506100bd61038c565b60408051600160a060020a039092168252519081900360200190f35b3480156100e557600080fd5b5060408051602060046024803582810135601f810185900485028601850190965285855261017e958335600160a060020a031695369560449491939091019190819084018382808284375050604080516020601f89358b018035918201839004830284018301909452808352979a99988101979196509182019450925082915084018382808284375094975061039b9650505050505050565b604080519115158252519081900360200190f35b34801561019e57600080fd5b506100bd6104a4565b3480156101b357600080fd5b506101bc6104b3565b60408051918252519081900360200190f35b3480156101da57600080fd5b50610201600160a060020a03600435811690602435811690604435811690606435166104b9565b005b34801561020f57600080fd5b506100bd610583565b34801561022457600080fd5b5060408051602060046024803582810135601f8101859004850286018501909652858552610201958335600160a060020a031695369560449491939091019190819084018382808284375050604080516020601f89358b018035918201839004830284018301909452808352979a9998810197919650918201945092508291508401838280828437509497506105929650505050505050565b3480156102c957600080fd5b5060408051602060046024803582810135601f8101859004850286018501909652858552610201958335600160a060020a031695369560449491939091019190819084018382808284375050604080516020601f89358b018035918201839004830284018301909452808352979a9998810197919650918201945092508291508401838280828437509497506106f69650505050505050565b34801561036e57600080fd5b506100bd610852565b34801561038357600080fd5b506100bd610861565b600354600160a060020a031690565b600080836040518082805190602001908083835b602083106103ce5780518252601f1990920191602091820191016103af565b51815160209384036101000a60001901801990921691161790529201948552506040519384900301909220546104571491508190506104265750600160a060020a038416600090815260016020526040902054610457145b8061049257506002826040518082805190602001908083835b6020831061045e5780518252601f19909201916020918201910161043f565b51815160209384036101000a6000190180199092169116179052920194855250604051938490030190922054610457149150505b151561049a57fe5b5060019392505050565b600454600160a060020a031690565b60085490565b600354600160a060020a03163314806104dc5750600454600160a060020a031633145b806104f15750600554600160a060020a031633145b806105065750600654600160a060020a031633145b8061051b5750600754600160a060020a031633145b151561052657600080fd5b60048054600160a060020a0395861673ffffffffffffffffffffffffffffffffffffffff19918216179091556005805494861694821694909417909355600680549285169284169290921790915560078054919093169116179055565b600654600160a060020a031690565b600354600160a060020a03163314806105b55750600454600160a060020a031633145b806105ca5750600554600160a060020a031633145b806105df5750600654600160a060020a031633145b806105f45750600754600160a060020a031633145b15156105ff57600080fd5b6104576000836040518082805190602001908083835b602083106106345780518252601f199092019160209182019101610615565b51815160209384036101000a600019018019909216911617905292019485525060408051948590038201852095909555600160a060020a03881660009081526001825294909420610457908190558551909460029487945092508291908401908083835b602083106106b75780518252601f199092019160209182019101610698565b51815160209384036101000a60001901801990921691161790529201948552506040519384900301909220929092555050600880546001019055505050565b600354600160a060020a03163314806107195750600454600160a060020a031633145b8061072e5750600554600160a060020a031633145b806107435750600654600160a060020a031633145b806107585750600754600160a060020a031633145b151561076357600080fd5b6000826040518082805190602001908083835b602083106107955780518252601f199092019160209182019101610776565b51815160209384036101000a6000190180199092169116179052920194855250604080519485900382018520600090819055600160a060020a038916815260018352908120558451600294869450925082918401908083835b6020831061080d5780518252601f1990920191602091820191016107ee565b51815160001960209485036101000a81019182169119929092161790915293909101958652604051958690030190942060009055600880549091019055505050505050565b600554600160a060020a031690565b600754600160a060020a0316905600a165627a7a72305820e2eda46b73e183d942b24f07d97d3442a481831f68039bea41f4e6199798daee0029`
 
 // DeployNodeMapping deploys a new Ethereum contract, binding an instance of NodeMapping to it.
-func DeployNodeMapping(auth *bind.TransactOpts, backend bind.ContractBackend, setCollateralRequirement *big.Int) (common.Address, *types.Transaction, *NodeMapping, error) {
+func DeployNodeMapping(auth *bind.TransactOpts, backend bind.ContractBackend) (common.Address, *types.Transaction, *NodeMapping, error) {
 	parsed, err := abi.JSON(strings.NewReader(NodeMappingABI))
 	if err != nil {
 		return common.Address{}, nil, nil, err
 	}
-	address, tx, contract, err := bind.DeployContract(auth, parsed, common.FromHex(NodeMappingBin), backend, setCollateralRequirement)
+	address, tx, contract, err := bind.DeployContract(auth, parsed, common.FromHex(NodeMappingBin), backend)
 	if err != nil {
 		return common.Address{}, nil, nil, err
 	}
@@ -214,30 +214,108 @@ func (_NodeMapping *NodeMappingCallerSession) GetNodeCount() (*big.Int, error) {
 	return _NodeMapping.Contract.GetNodeCount(&_NodeMapping.CallOpts)
 }
 
-// GetOperator is a free data retrieval call binding the contract method 0xcededfb3.
+// GetOperator1 is a free data retrieval call binding the contract method 0x6589c3ec.
 //
-// Solidity: function GetOperator() constant returns(address)
-func (_NodeMapping *NodeMappingCaller) GetOperator(opts *bind.CallOpts) (common.Address, error) {
+// Solidity: function GetOperator1() constant returns(address)
+func (_NodeMapping *NodeMappingCaller) GetOperator1(opts *bind.CallOpts) (common.Address, error) {
 	var (
 		ret0 = new(common.Address)
 	)
 	out := ret0
-	err := _NodeMapping.contract.Call(opts, out, "GetOperator")
+	err := _NodeMapping.contract.Call(opts, out, "GetOperator1")
 	return *ret0, err
 }
 
-// GetOperator is a free data retrieval call binding the contract method 0xcededfb3.
+// GetOperator1 is a free data retrieval call binding the contract method 0x6589c3ec.
 //
-// Solidity: function GetOperator() constant returns(address)
-func (_NodeMapping *NodeMappingSession) GetOperator() (common.Address, error) {
-	return _NodeMapping.Contract.GetOperator(&_NodeMapping.CallOpts)
+// Solidity: function GetOperator1() constant returns(address)
+func (_NodeMapping *NodeMappingSession) GetOperator1() (common.Address, error) {
+	return _NodeMapping.Contract.GetOperator1(&_NodeMapping.CallOpts)
 }
 
-// GetOperator is a free data retrieval call binding the contract method 0xcededfb3.
+// GetOperator1 is a free data retrieval call binding the contract method 0x6589c3ec.
 //
-// Solidity: function GetOperator() constant returns(address)
-func (_NodeMapping *NodeMappingCallerSession) GetOperator() (common.Address, error) {
-	return _NodeMapping.Contract.GetOperator(&_NodeMapping.CallOpts)
+// Solidity: function GetOperator1() constant returns(address)
+func (_NodeMapping *NodeMappingCallerSession) GetOperator1() (common.Address, error) {
+	return _NodeMapping.Contract.GetOperator1(&_NodeMapping.CallOpts)
+}
+
+// GetOperator2 is a free data retrieval call binding the contract method 0xe56374bf.
+//
+// Solidity: function GetOperator2() constant returns(address)
+func (_NodeMapping *NodeMappingCaller) GetOperator2(opts *bind.CallOpts) (common.Address, error) {
+	var (
+		ret0 = new(common.Address)
+	)
+	out := ret0
+	err := _NodeMapping.contract.Call(opts, out, "GetOperator2")
+	return *ret0, err
+}
+
+// GetOperator2 is a free data retrieval call binding the contract method 0xe56374bf.
+//
+// Solidity: function GetOperator2() constant returns(address)
+func (_NodeMapping *NodeMappingSession) GetOperator2() (common.Address, error) {
+	return _NodeMapping.Contract.GetOperator2(&_NodeMapping.CallOpts)
+}
+
+// GetOperator2 is a free data retrieval call binding the contract method 0xe56374bf.
+//
+// Solidity: function GetOperator2() constant returns(address)
+func (_NodeMapping *NodeMappingCallerSession) GetOperator2() (common.Address, error) {
+	return _NodeMapping.Contract.GetOperator2(&_NodeMapping.CallOpts)
+}
+
+// GetOperator3 is a free data retrieval call binding the contract method 0xb3df8934.
+//
+// Solidity: function GetOperator3() constant returns(address)
+func (_NodeMapping *NodeMappingCaller) GetOperator3(opts *bind.CallOpts) (common.Address, error) {
+	var (
+		ret0 = new(common.Address)
+	)
+	out := ret0
+	err := _NodeMapping.contract.Call(opts, out, "GetOperator3")
+	return *ret0, err
+}
+
+// GetOperator3 is a free data retrieval call binding the contract method 0xb3df8934.
+//
+// Solidity: function GetOperator3() constant returns(address)
+func (_NodeMapping *NodeMappingSession) GetOperator3() (common.Address, error) {
+	return _NodeMapping.Contract.GetOperator3(&_NodeMapping.CallOpts)
+}
+
+// GetOperator3 is a free data retrieval call binding the contract method 0xb3df8934.
+//
+// Solidity: function GetOperator3() constant returns(address)
+func (_NodeMapping *NodeMappingCallerSession) GetOperator3() (common.Address, error) {
+	return _NodeMapping.Contract.GetOperator3(&_NodeMapping.CallOpts)
+}
+
+// GetOperator4 is a free data retrieval call binding the contract method 0xf905a780.
+//
+// Solidity: function GetOperator4() constant returns(address)
+func (_NodeMapping *NodeMappingCaller) GetOperator4(opts *bind.CallOpts) (common.Address, error) {
+	var (
+		ret0 = new(common.Address)
+	)
+	out := ret0
+	err := _NodeMapping.contract.Call(opts, out, "GetOperator4")
+	return *ret0, err
+}
+
+// GetOperator4 is a free data retrieval call binding the contract method 0xf905a780.
+//
+// Solidity: function GetOperator4() constant returns(address)
+func (_NodeMapping *NodeMappingSession) GetOperator4() (common.Address, error) {
+	return _NodeMapping.Contract.GetOperator4(&_NodeMapping.CallOpts)
+}
+
+// GetOperator4 is a free data retrieval call binding the contract method 0xf905a780.
+//
+// Solidity: function GetOperator4() constant returns(address)
+func (_NodeMapping *NodeMappingCallerSession) GetOperator4() (common.Address, error) {
+	return _NodeMapping.Contract.GetOperator4(&_NodeMapping.CallOpts)
 }
 
 // GetOwner is a free data retrieval call binding the contract method 0x0ae50a39.
@@ -329,23 +407,23 @@ func (_NodeMapping *NodeMappingTransactorSession) RemoveNode(nodeAddress common.
 	return _NodeMapping.Contract.RemoveNode(&_NodeMapping.TransactOpts, nodeAddress, id, ip)
 }
 
-// SetOperator is a paid mutator transaction binding the contract method 0xdbebfba6.
+// SetOperators is a paid mutator transaction binding the contract method 0x7486a074.
 //
-// Solidity: function SetOperator(address newOperator) returns()
-func (_NodeMapping *NodeMappingTransactor) SetOperator(opts *bind.TransactOpts, newOperator common.Address) (*types.Transaction, error) {
-	return _NodeMapping.contract.Transact(opts, "SetOperator", newOperator)
+// Solidity: function SetOperators(address newOperator1, address newOperator2, address newOperator3, address newOperator4) returns()
+func (_NodeMapping *NodeMappingTransactor) SetOperators(opts *bind.TransactOpts, newOperator1 common.Address, newOperator2 common.Address, newOperator3 common.Address, newOperator4 common.Address) (*types.Transaction, error) {
+	return _NodeMapping.contract.Transact(opts, "SetOperators", newOperator1, newOperator2, newOperator3, newOperator4)
 }
 
-// SetOperator is a paid mutator transaction binding the contract method 0xdbebfba6.
+// SetOperators is a paid mutator transaction binding the contract method 0x7486a074.
 //
-// Solidity: function SetOperator(address newOperator) returns()
-func (_NodeMapping *NodeMappingSession) SetOperator(newOperator common.Address) (*types.Transaction, error) {
-	return _NodeMapping.Contract.SetOperator(&_NodeMapping.TransactOpts, newOperator)
+// Solidity: function SetOperators(address newOperator1, address newOperator2, address newOperator3, address newOperator4) returns()
+func (_NodeMapping *NodeMappingSession) SetOperators(newOperator1 common.Address, newOperator2 common.Address, newOperator3 common.Address, newOperator4 common.Address) (*types.Transaction, error) {
+	return _NodeMapping.Contract.SetOperators(&_NodeMapping.TransactOpts, newOperator1, newOperator2, newOperator3, newOperator4)
 }
 
-// SetOperator is a paid mutator transaction binding the contract method 0xdbebfba6.
+// SetOperators is a paid mutator transaction binding the contract method 0x7486a074.
 //
-// Solidity: function SetOperator(address newOperator) returns()
-func (_NodeMapping *NodeMappingTransactorSession) SetOperator(newOperator common.Address) (*types.Transaction, error) {
-	return _NodeMapping.Contract.SetOperator(&_NodeMapping.TransactOpts, newOperator)
+// Solidity: function SetOperators(address newOperator1, address newOperator2, address newOperator3, address newOperator4) returns()
+func (_NodeMapping *NodeMappingTransactorSession) SetOperators(newOperator1 common.Address, newOperator2 common.Address, newOperator3 common.Address, newOperator4 common.Address) (*types.Transaction, error) {
+	return _NodeMapping.Contract.SetOperators(&_NodeMapping.TransactOpts, newOperator1, newOperator2, newOperator3, newOperator4)
 }

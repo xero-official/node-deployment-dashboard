@@ -496,24 +496,28 @@ func getBlockHeight() bool {
 }
 */
 func contractDeployment(key string) {
+    var typeAddresses []common.Address
+
     for _, nodeType := range NodeTypes {
         time.Sleep(30 * time.Second)
-        deployNodeTypeContract(key, nodeType.RequiredCollateral)
+        typeAddresses = append(typeAddresses, deployNodeTypeContract(key, nodeType.RequiredCollateral))
     }
 
     time.Sleep(30 * time.Second)
     mappingAddress := deployMappingContract(key)
 
     count := int(1)
-    for _, _ = range NodeTypes {
+    for _, typeAddress := range typeAddresses {
         time.Sleep(30 * time.Second)
-        updateNodeTypeContractMappingAddress(key, count, mappingAddress)
+        updateNodeTypeContractMappingAddress(key, count, mappingAddress, typeAddress)
         count++
     }
 
+    time.Sleep(30 * time.Second)
+    updateMappingOperators(key, mappingAddress, typeAddresses[0], typeAddresses[1], typeAddresses[2], typeAddresses[3])
 }
 
-func updateNodeTypeContractMappingAddress(key string, nodeType int, mappingAddress common.Address) {
+func updateMappingOperators(key string, mappingAddress common.Address, contractAddress1 common.Address, contractAddress2 common.Address, contractAddress3 common.Address, contractAddress4 common.Address) {
     //homeDirectory := getHomeDirectory()
     //homeDirectory := getHomeDirectory()
 
@@ -550,7 +554,66 @@ func updateNodeTypeContractMappingAddress(key string, nodeType int, mappingAddre
     auth.GasLimit = uint64(3000000) // in units
     auth.GasPrice = gasPrice
 
-    address := common.HexToAddress(NodeTypes[nodeType].ContractAddress)
+    address := mappingAddress
+    instance, err := NewNodeMapping(address, client)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // Add node
+    tx, err := instance.SetOperators(auth, contractAddress1, contractAddress2, contractAddress3, contractAddress4)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    fmt.Println("Updating Mapping Operators")
+    fmt.Printf("Operator1: %s", contractAddress1.Hex())
+    fmt.Printf("Operator2: %s", contractAddress2.Hex())
+    fmt.Printf("Operator3: %s", contractAddress3.Hex())
+    fmt.Printf("Operator4: %s", contractAddress4.Hex())
+    fmt.Printf("Tx Sent: %s", tx.Hash().Hex())
+    fmt.Println("\n")
+
+}
+
+func updateNodeTypeContractMappingAddress(key string, nodeType int, mappingAddress common.Address, contractAddress common.Address) {
+    //homeDirectory := getHomeDirectory()
+    //homeDirectory := getHomeDirectory()
+
+    client, err := ethclient.Dial(DefaultDataDir() + "/geth.ipc")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    privateKey, err := crypto.HexToECDSA(key)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    publicKey := privateKey.Public()
+    publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
+    if !ok {
+        log.Fatal("error casting public key to ECDSA")
+    }
+
+    fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
+    nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    gasPrice, err := client.SuggestGasPrice(context.Background())
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    auth := bind.NewKeyedTransactor(privateKey)
+    auth.Nonce = big.NewInt(int64(nonce))
+    auth.Value = big.NewInt(0) // in wei
+    auth.GasLimit = uint64(3000000) // in units
+    auth.GasPrice = gasPrice
+
+    address := contractAddress
     instance, err := NewNodeContract(address, client)
     if err != nil {
         log.Fatal(err)
@@ -568,7 +631,7 @@ func updateNodeTypeContractMappingAddress(key string, nodeType int, mappingAddre
 
 }
 
-func deployNodeTypeContract(key string, contractCollateral int) {
+func deployNodeTypeContract(key string, contractCollateral int) common.Address {
     //homeDirectory := getHomeDirectory()
 
     client, err := ethclient.Dial(DefaultDataDir() + "/geth.ipc")
@@ -626,6 +689,8 @@ func deployNodeTypeContract(key string, contractCollateral int) {
          log.Fatal(err)
     }
     fmt.Println("Saving Contract Deployment Output...\n")
+
+    return address
 
 }
 
@@ -732,7 +797,22 @@ func checkNodeStats() {
     }
 
     // Get node mapping operator
-    mappingOperator, err := instance.GetOperator(&bind.CallOpts{})
+    mappingOperator1, err := instance.GetOperator1(&bind.CallOpts{})
+    if err != nil {
+        log.Fatal(err)
+    }
+    // Get node mapping operator
+    mappingOperator2, err := instance.GetOperator2(&bind.CallOpts{})
+    if err != nil {
+        log.Fatal(err)
+    }
+    // Get node mapping operator
+    mappingOperator3, err := instance.GetOperator3(&bind.CallOpts{})
+    if err != nil {
+        log.Fatal(err)
+    }
+    // Get node mapping operator
+    mappingOperator4, err := instance.GetOperator4(&bind.CallOpts{})
     if err != nil {
         log.Fatal(err)
     }
@@ -748,7 +828,10 @@ func checkNodeStats() {
     }
 
     fmt.Println("Checking Node Mapping Contract Stats..")
-    fmt.Println("Node Mapping Operator: " + mappingOperator.Hex())
+    fmt.Println("Node Mapping Operator1: " + mappingOperator1.Hex())
+    fmt.Println("Node Mapping Operator2: " + mappingOperator2.Hex())
+    fmt.Println("Node Mapping Operator3: " + mappingOperator3.Hex())
+    fmt.Println("Node Mapping Operator4: " + mappingOperator4.Hex())
     fmt.Println("Node Mapping Owner: " + mappingOwner.Hex())
     fmt.Println("Node Count: " + mappingNodeCount.String())
     fmt.Println("\n")
