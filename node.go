@@ -218,16 +218,6 @@ func main() {
 
         } else if contractOption == 6 && *adminFlag {
 
-            reader := bufio.NewReader(os.Stdin)
-
-            // Get Mapping Contract Address
-            var mappingContractAddress string
-            fmt.Println("Enter Address For Mapping Contract:")
-            mappingContractAddress, _ = reader.ReadString('\n')
-            mappingContractAddress = strings.TrimSuffix(mappingContractAddress, "\n")
-
-            MappingAddress = mappingContractAddress
-
             checkNodeStats()
             selectionFlag = true
 
