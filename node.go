@@ -39,7 +39,7 @@ type NodeType struct {
     ContractAddress       string
 }
 
-var MappingAddress = "0x3717AD55666577Eb92fCa3e5F9F71958bD60c620"
+var MappingAddress = "0xb4d46Ac49029fccbE1BCD54C11160a2F662f6638"
 
 var NodeTypes = map[int]NodeType {
     1 : NodeType{
@@ -734,7 +734,7 @@ func deployMappingContract(key string) common.Address {
     auth := bind.NewKeyedTransactor(privateKey)
     auth.Nonce = big.NewInt(int64(nonce))
     auth.Value = big.NewInt(0) // in wei
-    auth.GasLimit = uint64(5000000) // in units
+    auth.GasLimit = uint64(3000000) // in units
     auth.GasPrice = gasPrice
 
     // Deploy contract
