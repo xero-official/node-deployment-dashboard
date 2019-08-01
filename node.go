@@ -46,7 +46,6 @@ var NodeTypes = map[int]NodeType {
                 Name:                  "Chain Node",
                 RequiredCollateral:    5000,
                 ContractAddress:       "0x3717AD55666577Eb92fCa3e5F9F71958bD60c620",
-                //ContractAddress:       "0xC0968a743cF57a61baC462FF903d9318B61426f6",
     },
     2 : NodeType{
                 Name:                  "Xero Node",
@@ -88,13 +87,14 @@ func main() {
 
         var contractOption int
 
-        fmt.Println("1) Add a New Node")
-        fmt.Println("2) Remove an Existing Node")
-        fmt.Println("3) Lookup Existing Node")
-        fmt.Println("4) Exit")
+        fmt.Println("1) Add a New Node (Automated IP Address Detection)")
+        fmt.Println("2) Add a New Node (Manual IP Address Entry)")
+        fmt.Println("3) Remove an Existing Node")
+        fmt.Println("4) Lookup Existing Node")
+        fmt.Println("5) Exit")
         if *adminFlag {
-            fmt.Println("5) Deploy Contract")
-            fmt.Println("6) Contract Statistics")
+            fmt.Println("6) Deploy Contract")
+            fmt.Println("7) Contract Statistics")
         }
 
         _, _ = fmt.Scan(&contractOption)
@@ -145,10 +145,55 @@ func main() {
             } else {
 
                 selectionFlag = false
+            }
+        } else if contractOption == 2 {
+
+            nodeType := getNodeType()
+
+            if nodeType != 5 {
+
+                if checkBinExistence() {
+
+                    reader := bufio.NewReader(os.Stdin)
+
+                    // Get Node ID
+                    nodeId := hex.EncodeToString(getNodeId())
+                    fmt.Println("\nNode ID Found: " + nodeId)
+
+                    // Get Node IP
+                    var nodeIp string
+                    fmt.Println("Enter Node IP Address:")
+                    nodeIp, _ = reader.ReadString('\n')
+                    nodeIp = strings.TrimSuffix(nodeIp, "\n")
+
+                    // Get Node Port
+                    var nodePort string
+                    fmt.Println("Enter Node Port:")
+                    nodePort, _ = reader.ReadString('\n')
+                    nodePort = strings.TrimSuffix(nodePort, "\n")
+
+                    // Get Private Key
+                    var privateKey string
+                    fmt.Println("Enter Private Key of Address Containing Node Collateral:")
+                    privateKey, _ = reader.ReadString('\n')
+                    privateKey = strings.TrimSuffix(privateKey, "\n")
+
+                    addNode(nodeId, nodeIp, nodePort, privateKey, nodeType)
+
+                    selectionFlag = true
+
+                } else {
+                    fmt.Println("Node Not Found - Unable To Continue")
+                    os.Exit(0)
+                }
+
+            } else {
+
+                selectionFlag = false
 
             }
 
-        } else if contractOption == 2 {
+        } else if contractOption == 3 {
 
             nodeType := getNodeType()
 
@@ -172,7 +217,7 @@ func main() {
 
            }
 
-        } else if contractOption == 3 {
+        } else if contractOption == 4 {
 
             nodeType := getNodeType()
 
@@ -196,13 +241,13 @@ func main() {
 
            }
 
-        } else if contractOption == 4 {
+        } else if contractOption == 5 {
 
             selectionFlag = true
             fmt.Printf("\nExiting Program\n")
             os.Exit(0)
 
-        } else if contractOption == 5 && *adminFlag {
+        } else if contractOption == 6 && *adminFlag {
 
             reader := bufio.NewReader(os.Stdin)
 
@@ -216,7 +261,7 @@ func main() {
             contractDeployment(deploymentKey)
             selectionFlag = true
 
-        } else if contractOption == 6 && *adminFlag {
+        } else if contractOption == 7 && *adminFlag {
 
             checkNodeStats()
             selectionFlag = true
