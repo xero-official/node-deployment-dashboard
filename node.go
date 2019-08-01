@@ -87,8 +87,8 @@ func main() {
 
         var contractOption int
 
-        fmt.Println("1) Add a New Node (Automated IP Address Detection)")
-        fmt.Println("2) Add a New Node (Manual IP Address Entry)")
+        fmt.Println("1) Add a New Node (Automated ID/IP Detection)")
+        fmt.Println("2) Add a New Node (Manual ID/IP Entry)")
         fmt.Println("3) Remove an Existing Node")
         fmt.Println("4) Lookup Existing Node")
         fmt.Println("5) Exit")
@@ -157,8 +157,10 @@ func main() {
                     reader := bufio.NewReader(os.Stdin)
 
                     // Get Node ID
-                    nodeId := hex.EncodeToString(getNodeId())
-                    fmt.Println("\nNode ID Found: " + nodeId)
+                    var nodeId string
+                    fmt.Println("Enter Enode ID:")
+                    nodeId, _ = reader.ReadString('\n')
+                    nodeId = strings.TrimSuffix(nodeId, "\n")
 
                     // Get Node IP
                     var nodeIp string
