@@ -287,7 +287,7 @@ func getNodeType() int {
 
         fmt.Println("\n")
         fmt.Println("1) Chain Node")
-        fmt.Println("2) Zero Node")
+        fmt.Println("2) Xero Node")
         fmt.Println("3) Link Node")
         fmt.Println("4) Super Node")
         fmt.Println("5) Main Menu")
