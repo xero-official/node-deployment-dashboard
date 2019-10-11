@@ -9,5 +9,5 @@ module.exports = {
         LOOKUP_NODE: 4,
         EXIT: 5
     },
-    nodeTypes: ['Chain Node', 'Xero Node', 'Link Node', 'Super Node', 'Main Menu']
+    nodeTypes: ['Chain Node', 'Xero Node', 'Link Node', 'Super Node']
 }
