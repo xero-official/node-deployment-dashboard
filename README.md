@@ -18,3 +18,8 @@ go build -o build/dashboard && ./build/dashboard
 ```bash
 ./build/dashboard
 ```
+
+## Run GUI
+```bash
+sh build.sh
+```

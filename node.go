@@ -14,12 +14,14 @@ import (
     "os/signal"
     "encoding/hex"
     "time"
+    "encoding/json"
 
     "github.com/ethereum/go-ethereum/accounts/abi/bind"
     "github.com/ethereum/go-ethereum/common"
     "github.com/ethereum/go-ethereum/crypto"
     "github.com/ethereum/go-ethereum/ethclient"
     "github.com/glendc/go-external-ip"
+    "github.com/Equanox/gotron"
 )
 
 const logo = `
@@ -38,6 +40,12 @@ type NodeType struct {
     RequiredCollateral    int
     ContractAddress       string
 }
+
+type SelectOptionEvent struct {
+    *gotron.Event
+    ContractOption int `json:"contractOption"`
+}
+
 
 var MappingAddress = "0xb4d46Ac49029fccbE1BCD54C11160a2F662f6638"
 
@@ -65,6 +73,7 @@ var NodeTypes = map[int]NodeType {
 }
 
 func main() {
+
     // Flags
     adminFlag := flag.Bool("admin", false, "a bool")
     flag.Parse()
@@ -76,16 +85,31 @@ func main() {
     signal.Notify(gracefulStop, syscall.SIGTERM)
     signal.Notify(gracefulStop, syscall.SIGINT)
     go func() {
-           <-gracefulStop
-           fmt.Printf("\nExiting Program\n")
-           os.Exit(0)
+            <-gracefulStop
+            fmt.Printf("\nExiting Program\n")
+            os.Exit(0)
     }()
+    
+	window, err := gotron.New("ui/dist")
+    if err != nil {
+        panic(err)
+    }
 
-    var selectionFlag = false
-
-    for selectionFlag != true {
-
-        var contractOption int
+    window.WindowOptions.Width = 1200
+    window.WindowOptions.Height = 980
+    window.WindowOptions.Title = "Gotron"
+    done, err := window.Start()
+    if err != nil {
+        panic(err)
+    }
+    
+    window.On(&gotron.Event{Event: "OPTION_SELECTED"}, func(bin []byte) {
+        data := string(bin)
+        log.Printf("%s", data)
+        
+        option := SelectOptionEvent{}
+        json.Unmarshal(bin, &option)
+        contractOption := option.ContractOption
 
         fmt.Println("1) Add a New Node (Automated ID/IP Detection)")
         fmt.Println("2) Add a New Node (Manual ID/IP Entry)")
@@ -135,7 +159,7 @@ func main() {
 
                     addNode(nodeId, nodeIp, nodePort, privateKey, nodeType)
 
-                    selectionFlag = true
+                    // selectionFlag = true
 
                 } else {
                     fmt.Println("Node Not Found - Unable To Continue")
@@ -144,7 +168,7 @@ func main() {
 
             } else {
 
-                selectionFlag = false
+                // selectionFlag = false
             }
         } else if contractOption == 2 {
 
@@ -182,7 +206,7 @@ func main() {
 
                     addNode(nodeId, nodeIp, nodePort, privateKey, nodeType)
 
-                    selectionFlag = true
+                    // selectionFlag = true
 
                 } else {
                     fmt.Println("Node Not Found - Unable To Continue")
@@ -191,7 +215,7 @@ func main() {
 
             } else {
 
-                selectionFlag = false
+                // selectionFlag = false
 
             }
 
@@ -211,11 +235,11 @@ func main() {
 
                 removeNode(privateKey, nodeType)
 
-                selectionFlag = true
+                // selectionFlag = true
 
            } else {
 
-               selectionFlag = false
+            //    selectionFlag = false
 
            }
 
@@ -235,17 +259,17 @@ func main() {
 
                 checkNodeExistence(nodeAddress, nodeType)
 
-                selectionFlag = true
+                // selectionFlag = true
 
            } else {
 
-               selectionFlag = false
+            //    selectionFlag = false
 
            }
 
         } else if contractOption == 5 {
 
-            selectionFlag = true
+            // selectionFlag = true
             fmt.Printf("\nExiting Program\n")
             os.Exit(0)
 
@@ -261,21 +285,22 @@ func main() {
 
             // Deploy Contracts
             contractDeployment(deploymentKey)
-            selectionFlag = true
+            // selectionFlag = true
 
         } else if contractOption == 7 && *adminFlag {
 
             checkNodeStats()
-            selectionFlag = true
+            // selectionFlag = true
 
         } else {
 
             fmt.Println("\nInvalid Input\n")
-            selectionFlag = false
+            // selectionFlag = false
 
         }
+	})
 
-    }
+    <-done
 }
 
 func getNodeType() int {
