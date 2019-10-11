@@ -66,6 +66,7 @@ export default class Body extends Component {
         const secondAreaVisible = contractOption === options.ADD_NODE || contractOption === options.LOOKUP_NODE || contractOption === options.REMOVE_NODE;
         const thirdAreaVisible = (contractOption === options.LOOKUP_NODE || contractOption === options.REMOVE_NODE) && nodeType;
         const size = thirdAreaVisible ? [4, 4, 4] : secondAreaVisible ? [4, 6, 0] : [6, 0, 0];
+        const heading = contractOption === options.ADD_NODE ? "ADD NODE" : contractOption === options.REMOVE_NODE ? "REMOVE NODE" : "LOOKUP NODE";
 
         const label = contractOption === options.LOOKUP_NODE ? 'Lookup Address' : 'Private key';
         return (<Container style={{ maxWidth: '100%', marginTop: '0px' }}>
@@ -84,8 +85,8 @@ export default class Body extends Component {
                     <Col xs={size[1]}>
                         <div style={{ marginTop: '10px', height: '380px' }}>
                             <div style={{ marginTop: '10px', border: '1', borderRadius: '10px', height: '380px', backgroundColor: '#ededed' }}>
-                                <div style={{ color: 'white', width: 'calc(100% - 20px)', margin: '10px' }} >.</div>
-                                <div style={{ width: 'calc(100% - 20px)', margin: '10px' }} >Select Node Type</div>
+                                <div style={{ color: 'white', width: 'calc(100% - 20px)', margin: '0px' }} >.</div>
+                                <div style={{ width: 'calc(100% - 20px)', margin: '10px' }} >{heading}: Select Node Type</div>
                                 <ListGroup style={{ marginLeft: '10px', marginRight: '10px' }} >
                                     {nodeTypes.map((nodeType, i) => <ListGroup.Item action onClick={() => this.onNodeTypeSelected(i + 1)}>
                                         {(i + 1) + '. ' + nodeType}</ListGroup.Item>)}
@@ -98,7 +99,7 @@ export default class Body extends Component {
                     <Col xs={size[2]}>
                         <div style={{ marginTop: '10px', height: '380px' }}>
                             <div style={{ marginTop: '10px', border: '1', borderRadius: '10px', height: '380px', backgroundColor: '#ededed' }}>
-                                <div style={{ color: 'white', width: 'calc(100% - 20px)', margin: '10px' }} >.</div>
+                                <div style={{ color: 'white', width: 'calc(100% - 20px)', margin: '0px' }} >.</div>
                                 <div style={{ width: 'calc(100% - 20px)', margin: '10px' }} >Please type {label}</div>
                                 <InputGroup style={{ width: 'calc(100% - 20px)', paddingTop: '10px', margin: '10px' }} className="mb-3">
                                     <InputGroup.Prepend>
