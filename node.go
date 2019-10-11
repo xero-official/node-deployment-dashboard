@@ -44,6 +44,7 @@ type NodeType struct {
 type SelectOptionEvent struct {
     *gotron.Event
     ContractOption int `json:"contractOption"`
+    NodeType int `json:"nodeType"`
 }
 
 
@@ -103,29 +104,18 @@ func main() {
         panic(err)
     }
     
-    window.On(&gotron.Event{Event: "OPTION_SELECTED"}, func(bin []byte) {
+    window.On(&gotron.Event{Event: "SELECT_OPTION"}, func(bin []byte) {
         data := string(bin)
-        log.Printf("%s", data)
+        log.Printf("Event payload: %s", data)
         
         option := SelectOptionEvent{}
         json.Unmarshal(bin, &option)
         contractOption := option.ContractOption
-
-        fmt.Println("1) Add a New Node (Automated ID/IP Detection)")
-        fmt.Println("2) Add a New Node (Manual ID/IP Entry)")
-        fmt.Println("3) Remove an Existing Node")
-        fmt.Println("4) Lookup Existing Node")
-        fmt.Println("5) Exit")
-        if *adminFlag {
-            fmt.Println("6) Deploy Contract")
-            fmt.Println("7) Contract Statistics")
-        }
-
-        _, _ = fmt.Scan(&contractOption)
+        log.Printf("Selected option: %d", contractOption)
 
         if contractOption == 1 {
 
-            nodeType := getNodeType()
+            nodeType := option.NodeType
 
             if nodeType != 5 {
 
