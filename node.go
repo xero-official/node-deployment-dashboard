@@ -14,12 +14,14 @@ import (
     "os/signal"
     "encoding/hex"
     "time"
+    "encoding/json"
 
     "github.com/ethereum/go-ethereum/accounts/abi/bind"
     "github.com/ethereum/go-ethereum/common"
     "github.com/ethereum/go-ethereum/crypto"
     "github.com/ethereum/go-ethereum/ethclient"
     "github.com/glendc/go-external-ip"
+    "github.com/Equanox/gotron"
 )
 
 const logo = `
@@ -38,6 +40,17 @@ type NodeType struct {
     RequiredCollateral    int
     ContractAddress       string
 }
+
+type FrontEndEvent struct {
+    *gotron.Event
+    ContractOption int `json:"contractOption"`
+    NodeType int `json:"nodeType"`
+    PrivateKey string `json:"privateKey"`
+    NodeAddress string `json:"nodeAddress"`
+    Log string `json:"log"`
+}
+
+var uiRef *gotron.BrowserWindow
 
 var MappingAddress = "0xb4d46Ac49029fccbE1BCD54C11160a2F662f6638"
 
@@ -65,6 +78,7 @@ var NodeTypes = map[int]NodeType {
 }
 
 func main() {
+
     // Flags
     adminFlag := flag.Bool("admin", false, "a bool")
     flag.Parse()
@@ -76,32 +90,37 @@ func main() {
     signal.Notify(gracefulStop, syscall.SIGTERM)
     signal.Notify(gracefulStop, syscall.SIGINT)
     go func() {
-           <-gracefulStop
-           fmt.Printf("\nExiting Program\n")
-           os.Exit(0)
+            <-gracefulStop
+            fmt.Printf("\nExiting Program\n")
+            os.Exit(0)
     }()
+    
+	window, err := gotron.New("ui/dist")
+    if err != nil {
+        panic(err)
+    }
 
-    var selectionFlag = false
-
-    for selectionFlag != true {
-
-        var contractOption int
-
-        fmt.Println("1) Add a New Node (Automated ID/IP Detection)")
-        fmt.Println("2) Add a New Node (Manual ID/IP Entry)")
-        fmt.Println("3) Remove an Existing Node")
-        fmt.Println("4) Lookup Existing Node")
-        fmt.Println("5) Exit")
-        if *adminFlag {
-            fmt.Println("6) Deploy Contract")
-            fmt.Println("7) Contract Statistics")
-        }
-
-        _, _ = fmt.Scan(&contractOption)
+    uiRef = window
+    window.WindowOptions.Width = 1200
+    window.WindowOptions.Height = 980
+    window.WindowOptions.Title = "Gotron"
+    done, err := window.Start()
+    if err != nil {
+        panic(err)
+    }
+    
+    window.On(&gotron.Event{Event: "SELECT_OPTION"}, func(bin []byte) {
+        data := string(bin)
+        log.Printf("Event payload: %s", data)
+        logger("Event Recieved");
+        
+        option := FrontEndEvent{}
+        json.Unmarshal(bin, &option)
+        contractOption := option.ContractOption
 
         if contractOption == 1 {
 
-            nodeType := getNodeType()
+            nodeType := option.NodeType
 
             if nodeType != 5 {
 
@@ -112,6 +131,7 @@ func main() {
                     // Get Node ID
                     nodeId := hex.EncodeToString(getNodeId())
                     fmt.Println("\nNode ID Found: " + nodeId)
+                    logger("Node ID Found: " + nodeId);
 
                     // Get Node IP
                     var nodeIp string
@@ -135,7 +155,7 @@ func main() {
 
                     addNode(nodeId, nodeIp, nodePort, privateKey, nodeType)
 
-                    selectionFlag = true
+                    // selectionFlag = true
 
                 } else {
                     fmt.Println("Node Not Found - Unable To Continue")
@@ -144,7 +164,7 @@ func main() {
 
             } else {
 
-                selectionFlag = false
+                // selectionFlag = false
             }
         } else if contractOption == 2 {
 
@@ -182,7 +202,7 @@ func main() {
 
                     addNode(nodeId, nodeIp, nodePort, privateKey, nodeType)
 
-                    selectionFlag = true
+                    // selectionFlag = true
 
                 } else {
                     fmt.Println("Node Not Found - Unable To Continue")
@@ -191,61 +211,45 @@ func main() {
 
             } else {
 
-                selectionFlag = false
+                // selectionFlag = false
 
             }
 
         } else if contractOption == 3 {
 
-            nodeType := getNodeType()
+            nodeType := option.NodeType
 
             if nodeType != 5 {
 
-                reader := bufio.NewReader(os.Stdin)
+                removeNode(option.PrivateKey, nodeType)
 
-                // Get Private Key
-                var privateKey string
-                fmt.Println("Enter Private Key To Release Collateral and Delete Node:")
-                privateKey, _ = reader.ReadString('\n')
-                privateKey = strings.TrimSuffix(privateKey, "\n")
-
-                removeNode(privateKey, nodeType)
-
-                selectionFlag = true
+                // selectionFlag = true
 
            } else {
 
-               selectionFlag = false
+            //    selectionFlag = false
 
            }
 
         } else if contractOption == 4 {
 
-            nodeType := getNodeType()
+            nodeType := option.NodeType
 
             if nodeType != 5 {
 
-                reader := bufio.NewReader(os.Stdin)
+                checkNodeExistence(option.NodeAddress, nodeType)
 
-                // Get Private Key
-                var nodeAddress string
-                fmt.Println("Enter Node Address To Lookup Node:")
-                nodeAddress, _ = reader.ReadString('\n')
-                nodeAddress = strings.TrimSuffix(nodeAddress, "\n")
-
-                checkNodeExistence(nodeAddress, nodeType)
-
-                selectionFlag = true
+                // selectionFlag = true
 
            } else {
 
-               selectionFlag = false
+            //    selectionFlag = false
 
            }
 
         } else if contractOption == 5 {
 
-            selectionFlag = true
+            // selectionFlag = true
             fmt.Printf("\nExiting Program\n")
             os.Exit(0)
 
@@ -261,21 +265,28 @@ func main() {
 
             // Deploy Contracts
             contractDeployment(deploymentKey)
-            selectionFlag = true
+            // selectionFlag = true
 
         } else if contractOption == 7 && *adminFlag {
 
             checkNodeStats()
-            selectionFlag = true
+            // selectionFlag = true
 
         } else {
 
             fmt.Println("\nInvalid Input\n")
-            selectionFlag = false
+            // selectionFlag = false
 
         }
+	})
 
-    }
+    <-done
+}
+
+func logger(log string) {
+    uiRef.Send(&FrontEndEvent{Event: &gotron.Event{Event: "LOG"},
+        Log: log,
+    })
 }
 
 func getNodeType() int {
@@ -347,6 +358,7 @@ func addNode(nodeId string, nodeIp string, nodePort string, key string, nodeType
     publicKey := privateKey.Public()
     publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
     if !ok {
+        logger("error casting public key to ECDSA");
         log.Fatal("error casting public key to ECDSA")
     }
 

@@ -9,7 +9,6 @@ import (
     "context"
     "fmt"
     "log"
-    "bufio"
     "os"
     "strings"
     "path/filepath"
@@ -27,11 +26,8 @@ func checkBinExistence() bool {
         if nodeExistenceFlag {
             return true
         } else if nodeInstallationFlag == false {
-            reader := bufio.NewReader(os.Stdin)
-            var installNodeString string
-            fmt.Println("Would You Like To Install Node Binary? (Y/N)")
-            installNodeString, _ = reader.ReadString('\n')
-            installNodeString = strings.TrimSuffix(installNodeString, "\n")
+            installNodeString := strings.TrimSuffix("Y", "\n")
+                // TODO: Prompt will be added later
                 if installNodeString == "Y" {
                     nodeInstallationFlag = installNode()
                     os.Exit(0)
